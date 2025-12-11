@@ -15,15 +15,15 @@ jobs:
       - name: Install Ninja
         uses: seanmiddleditch/gha-setup-ninja@v3
 
+      - name: Install CMake
+        run: choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+
       - name: Setup MSVC environment
         uses: ilammy/msvc-dev-cmd@v1
         with:
           arch: amd64
 
-      - name: Install CMake
-        uses: lukka/get-cmake@v4
-
-      - name: Configure (CMake)
+      - name: Configure with CMake
         run: cmake -DCMAKE_BUILD_TYPE=Release -S . -B build -G Ninja
 
       - name: Build DLL
