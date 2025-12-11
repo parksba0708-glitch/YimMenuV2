@@ -1,0 +1,31 @@
+name: Build YimMenu
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install MSVC build tools
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Install CMake
+        uses: lukka/get-cmake@v3
+
+      - name: Configure with CMake
+        run: cmake -B build -S .
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: build/Release/
