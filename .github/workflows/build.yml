@@ -1,4 +1,4 @@
-name: Build YimMenu
+name: Build YimMenuV2
 
 on:
   push:
@@ -12,20 +12,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install MSVC build tools
-        uses: microsoft/setup-msbuild@v2
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v3
+
+      - name: Setup MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: amd64
 
       - name: Install CMake
         uses: lukka/get-cmake@v3
 
-      - name: Configure with CMake
-        run: cmake -B build -S .
+      - name: Configure (CMake)
+        run: cmake -DCMAKE_BUILD_TYPE=Release -S . -B build -G Ninja
 
-      - name: Build
-        run: cmake --build build --config Release
+      - name: Build DLL
+        run: cmake --build build --config Release --target YimMenuV2
 
-      - name: Upload artifact
+      - name: Upload DLL
         uses: actions/upload-artifact@v4
         with:
-          name: build-output
-          path: build/Release/
+          name: YimMenuV2-DLL
+          path: build/*.dll
